@@ -2,7 +2,7 @@
 
 A fundraising auction platform built for **Imagine Scholar**.
 
-The goal is to create a simple monthly online auction where supporters can bid on a sponsored peanut butter and jelly item. The highest bidder at the end of the month is notified and the funds support Imagine Scholar's initiatives.
+This is a monthly online auction where supporters can bid on a peanut butter and jelly item. The highest bidder at the end of the month is notified and the funds support Imagine Scholar's initiatives.
 
 ---
 
@@ -11,7 +11,6 @@ The goal is to create a simple monthly online auction where supporters can bid o
 ### Frontend
 - React
 - JavaScript
-- Vite
 
 ### Backend
 - Firebase Authentication
@@ -20,7 +19,6 @@ The goal is to create a simple monthly online auction where supporters can bid o
 
 ### Hosting
 - Vercel
-- GitHub
 
 ---
 
@@ -64,6 +62,7 @@ Twice per month:
 
 Firebase Realtime Database:
 
+```
 root
 │
 ├── accounts
@@ -89,7 +88,7 @@ root
           bidderId: "uid2"
           amount: 50
           timestamp: 1753212500
-
+```
 
 ---
 
