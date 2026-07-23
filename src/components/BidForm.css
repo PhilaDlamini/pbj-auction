@@ -1,0 +1,93 @@
+.bid-form {
+    padding: 4px 24px 8px;
+}
+
+.bid-form__title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.bid-form__row {
+    display: flex;
+    gap: 10px;
+}
+
+.bid-form__input-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--color-taupe-soft);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 0 14px;
+}
+
+.bid-form__input-wrap:focus-within {
+    border-color: var(--color-green);
+}
+
+.bid-form__prefix {
+    color: var(--color-ink-soft);
+    font-family: var(--font-mono);
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.bid-form__input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    padding: 14px 0;
+    font-family: var(--font-mono);
+    font-size: 17px;
+    color: var(--color-ink);
+}
+
+.bid-form__input:focus {
+    outline: none;
+}
+
+.bid-form__input::-webkit-outer-spin-button,
+.bid-form__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.bid-form__submit {
+    background: var(--color-green);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0 22px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.bid-form__submit:hover {
+    background: var(--color-green-deep);
+}
+
+.bid-form__hint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--color-ink-soft);
+}
+
+@media (max-width: 420px) {
+    .bid-form {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .bid-form__row {
+        flex-direction: column;
+    }
+
+    .bid-form__submit {
+        padding: 14px 22px;
+    }
+}

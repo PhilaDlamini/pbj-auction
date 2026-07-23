@@ -1,52 +1,50 @@
 /*
 The home screen
 */
+import { useEffect, useState } from "react";
 import HighestBid from "../components/HighestBid";
 import BidForm from "../components/BidForm";
 import BidHistory from "../components/BidHistory";
+import AcaciaDivider from "../components/AcaciaDivider";
+import Header from "../components/Header";
 import { logout } from "../firebase/auth.js";
-import { useState, useEffect } from "react";
 import { getAuctionData } from "../firebase/database.js";
-
-//Hanldes logging out the user
-async function handleLogout() {
-    try {
-        await logout();
-    } catch (error) {
-        console.error(error);
-    }
-}
+import "./Home.css";
 
 function Home () {
-
-    //The home component owns the bidding state 
     const [highestBid, setHighestBid] = useState(null);
     const [bids, setBids] = useState([]);
 
-    //Load the auction info when the component is mounted
-    async function loadAuction() {
+    async function handleLogout() {
+        try {
+            await logout();
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
+    async function loadAuction() {
         const auction = await getAuctionData();
-    
+
         setHighestBid(auction.highestBid);
         setBids(auction.bids);
-    
     }
 
     useEffect(() => {
         loadAuction();
     }, []);
 
-
     return (
-        <>
-            <HighestBid highestBid={highestBid}/>
-            <BidForm highestBid={highestBid} loadAuction={loadAuction}/>
-            <BidHistory bids={bids} />
-            <button onClick={handleLogout}>Logout</button>
-        </>
-    ); 
+        <div className="page">
+            <Header onLogout={handleLogout} />
+            <main className="auction-card">
+                <HighestBid highestBid={highestBid} />
+                <AcaciaDivider />
+                <BidForm highestBid={highestBid} loadAuction={loadAuction} />
+                <BidHistory bids={bids} />
+            </main>
+        </div>
+    );
 }
 
-
-export default Home
+export default Home;

@@ -1,30 +1,26 @@
 /* Displays the current highest bid for the auction */
-import { useEffect, useState } from "react";
-import { getAccountById } from "../firebase/database";
+import "./HighestBid.css";
 
 function HighestBid({ highestBid }) {
-
     if (!highestBid) {
         return (
-            <div>
-                <h3>Current Highest Bid</h3>
-                <p>No bids yet.</p>
-            </div>
+            <section className="hero">
+                <p className="hero__eyebrow">This month's jar</p>
+                <p className="hero__amount">$0</p>
+                <p className="hero__label">current highest bid</p>
+                <p className="hero__bidder">No bids yet</p>
+            </section>
         );
     }
 
-
     return (
-        <div>
-
-            <h3>Current Highest Bid</h3>
-            <img src={highestBid.bidder.photoURL} alt="Profile" />
-            <p> {highestBid.bidder.name} </p>
-            <p> ${highestBid.amount} </p>
-
-        </div>
+        <section className="hero">
+            <p className="hero__eyebrow">This month's jar</p>
+            <p className="hero__amount">${highestBid.amount}</p>
+            <p className="hero__label">current highest bid</p>
+            <p className="hero__bidder">held by {highestBid.bidder.name}</p>
+        </section>
     );
 }
-
 
 export default HighestBid;

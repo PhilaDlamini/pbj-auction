@@ -1,63 +1,64 @@
 /* Allows a user to submit a new higher bid */
-
 import { useState } from "react";
 import { createBid } from "../firebase/database.js";
 import { useAuth } from "../context/AuthContext.jsx";
-
+import "./BidForm.css";
 
 function BidForm({ highestBid, loadAuction }) {
     const [amount, setAmount] = useState("");
     const { currentUser } = useAuth();
+    const currentHighest = highestBid
+        ? highestBid.amount
+        : 0;
 
     async function handleSubmit(event) {
-
-        // Prevent the form from refreshing the page
         event.preventDefault();
+
         const bidAmount = Number(amount);
 
-        // Get current highest amount
-        const currentHighest = highestBid
-            ? highestBid.amount
-            : 0;
-
-        // Reject lower/equal bids
         if (bidAmount <= currentHighest) {
             alert("Your bid must be higher than the current highest bid.");
             return;
         }
 
-        // Create a new bid in the database
         try {
-
             await createBid(
                 currentUser.uid,
                 bidAmount
             );
 
-            // Refresh Home state
             await loadAuction();
             setAmount("");
-
         } catch (error) {
             console.error(error);
         }
-
     }
 
     return (
-        <div>
-
-            <h3>Submit a New Bid</h3>
-
-            <form onSubmit={handleSubmit}>
-                <input type="number" placeholder="Enter bid amount" value={amount} onChange={(event) => setAmount(event.target.value)}/>
-                <button type="submit"> Submit Bid </button>
-
+        <section className="bid-form">
+            <h2 className="bid-form__title">Place your bid</h2>
+            <form className="bid-form__row" onSubmit={handleSubmit}>
+                <label className="bid-form__input-wrap">
+                    <span className="bid-form__prefix">$</span>
+                    <input
+                        className="bid-form__input"
+                        type="number"
+                        inputMode="decimal"
+                        min={currentHighest + 1}
+                        step="1"
+                        placeholder={String(currentHighest + 1)}
+                        value={amount}
+                        onChange={(event) => setAmount(event.target.value)}
+                        aria-label="Bid amount in dollars"
+                    />
+                </label>
+                <button className="bid-form__submit" type="submit">
+                    Bid
+                </button>
             </form>
-
-        </div>
+            <p className="bid-form__hint">Every bid must beat ${currentHighest}</p>
+        </section>
     );
 }
-
 
 export default BidForm;

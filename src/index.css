@@ -1,0 +1,88 @@
+/*
+Design tokens for the PB&J Auction.
+Colors are sampled directly from the Imagine Scholar logo: acacia green,
+warm taupe, and near-black, on a white/cream ground.
+*/
+
+:root {
+  --color-bg: #fbfaf7;
+  --color-surface: #ffffff;
+  --color-ink: #201d1a;
+  --color-ink-soft: #726b63;
+  --color-taupe: #bab4af;
+  --color-taupe-soft: #ece9e4;
+  --color-line: #e4e0da;
+  --color-green: #7bb73d;
+  --color-green-deep: #5c9128;
+  --color-green-tint: #f1f7e9;
+  --color-black: #14120f;
+  --color-danger: #a13b2c;
+
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+
+  --radius-lg: 24px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+
+  --shadow-card: 0 20px 50px -28px rgba(20, 18, 15, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  margin: 0;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-green);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
