@@ -17,7 +17,7 @@ function BidHistory({ bids }) {
                             {bid.bidder.name}
 
                             {" "}
-                            ${bid.amount}
+                            R{bid.amount}
 
                             {" "}
                             {new Date(

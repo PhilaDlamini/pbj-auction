@@ -39,7 +39,7 @@ function BidForm({ highestBid, loadAuction }) {
             <h2 className="bid-form__title">Place your bid</h2>
             <form className="bid-form__row" onSubmit={handleSubmit}>
                 <label className="bid-form__input-wrap">
-                    <span className="bid-form__prefix">$</span>
+                    <span className="bid-form__prefix">R</span>
                     <input
                         className="bid-form__input"
                         type="number"
@@ -56,7 +56,7 @@ function BidForm({ highestBid, loadAuction }) {
                     Bid
                 </button>
             </form>
-            <p className="bid-form__hint">Every bid must beat ${currentHighest}</p>
+            <p className="bid-form__hint">Every bid must beat R{currentHighest}</p>
         </section>
     );
 }
