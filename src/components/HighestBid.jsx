@@ -1,12 +1,30 @@
-/* Displays the current Highest Bid for the auction */
+/* Displays the current highest bid for the auction */
+import { useEffect, useState } from "react";
+import { getAccountById } from "../firebase/database";
 
-function HighestBid() {
+function HighestBid({ highestBid }) {
+
+    if (!highestBid) {
+        return (
+            <div>
+                <h3>Current Highest Bid</h3>
+                <p>No bids yet.</p>
+            </div>
+        );
+    }
+
+
     return (
         <div>
+
             <h3>Current Highest Bid</h3>
-            <p>$20 by Bidder 3</p>
+            <img src={highestBid.bidder.photoURL} alt="Profile" />
+            <p> {highestBid.bidder.name} </p>
+            <p> ${highestBid.amount} </p>
+
         </div>
     );
 }
+
 
 export default HighestBid;

@@ -6,11 +6,7 @@ import {
     set,
     get,
     push,
-    remove,
-    query,
-    orderByChild,
-    limitToLast
-} from "firebase/database";
+    remove} from "firebase/database";
 
 import { app } from "./config";
 
@@ -33,7 +29,7 @@ export async function createAccount(uid, accountInfo) {
 
 
 // Returns an account by uid
-export async function getAccount(uid) {
+export async function getAccountById(uid) {
 
     const snapshot = await get(
         ref(database, `accounts/${uid}`)
@@ -73,22 +69,105 @@ export async function getBids() {
 
 }
 
+/* 
+Returns the list of bids enriched with the bidder's account info
 
-// Returns the current highest bid
-export async function getHighestBid() {
+Example:
+[{
+        bidId: "-abc123",
+        amount: 50,
+        timestamp: 1753212500,
+        bidder: {
+            name: "Phila",
+            photoURL: "https://..."
+        }
+}]
+*/
+export async function getBidsWithAccounts() {
 
-    const highestBidQuery = query(
-        ref(database, "bids"),
-        orderByChild("amount"),
-        limitToLast(1) //Get highest bid
+    const bids = await getBids();
+
+    if (!bids) {
+        return [];
+    }
+
+    const enrichedBids = await Promise.all(
+        Object.entries(bids).map(
+            async ([bidId, bid]) => {
+
+                const account = await getAccountById(
+                    bid.bidderId
+                );
+
+                return {
+                    bidId,
+                    ...bid,
+                    bidder: account
+                };
+            }
+        )
     );
 
-    const snapshot = await get(highestBidQuery);
-
-    return snapshot.val();
-
+    return enrichedBids;
 }
 
+/*
+Returns all auction data needed by Home.
+
+Example:
+
+{
+    bids: [
+        {
+            bidId: "-abc123",
+            amount: 50,
+            timestamp: 1753212500,
+            bidder: {
+                name: "Phila",
+                photoURL: "..."
+            }
+        }
+    ],
+
+    highestBid: {
+        bidId: "-abc123",
+        amount: 50,
+        timestamp: 1753212500,
+        bidder: {
+            name: "Phila",
+            photoURL: "..."
+        }
+    }
+}
+*/
+export async function getAuctionData() {
+
+    const bids = await getBidsWithAccounts();
+
+    if (bids.length === 0) {
+        return {
+            bids: [],
+            highestBid: null
+        };
+    }
+
+
+    const highestBid = bids.reduce(
+        (highest, current) => {
+
+            return current.amount > highest.amount
+                ? current
+                : highest;
+
+        }
+    );
+
+
+    return {
+        bids,
+        highestBid
+    };
+}
 
 // ====================
 // Monthly Reset

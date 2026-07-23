@@ -1,14 +1,32 @@
 /* Component that displays the bid history for the current auction */
 
-function BidHistory() {
+function BidHistory({ bids }) {
+
     return (
         <div>
             <h3>Bid History</h3>
+
             <ul>
-                {/* History of all bids, orderd by time */}
-                <li>Bidder 1: $10, 1pm</li>
-                <li>Bidder 2: $15, 10am</li>
-                <li>Bidder 3: $20, 9:45am</li>
+                {
+                    bids.map((bid) => (
+                        <li key={bid.bidId}>
+
+                            <img src={bid.bidder.photoURL} alt="profile" />
+
+                            {" "}
+                            {bid.bidder.name}
+
+                            {" "}
+                            ${bid.amount}
+
+                            {" "}
+                            {new Date(
+                                bid.timestamp
+                            ).toLocaleString()}
+
+                        </li>
+                    ))
+                }
             </ul>
         </div>
     );
