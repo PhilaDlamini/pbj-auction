@@ -33,6 +33,66 @@
     background: var(--color-surface);
 }
 
+.auth-field--photo {
+    align-items: center;
+    text-align: center;
+}
+
+.photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.photo-upload__preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: var(--color-taupe-soft);
+    border: 2px dashed var(--color-taupe);
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+}
+
+.photo-upload__preview:hover {
+    border-color: var(--color-green);
+}
+
+.photo-upload__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-upload__placeholder {
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 300;
+    color: var(--color-taupe);
+}
+
+.photo-upload__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.photo-upload__hint {
+    font-size: 12px;
+    color: var(--color-ink-soft);
+}
+
 .auth-error {
     font-size: 13px;
     color: var(--color-danger);

@@ -1,7 +1,7 @@
 /*
 The signup page
 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signup } from "../firebase/auth.js";
 import { createAccount } from "../firebase/database.js";
 import AuthLayout from "../components/AuthLayout.jsx";
@@ -13,13 +13,44 @@ function Signup({ setPage }) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [photoFile, setPhotoFile] = useState(null);
+    const [photoPreview, setPhotoPreview] = useState("");
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Release the preview URL whenever it changes or the page unmounts
+    useEffect(() => {
+        return () => {
+            if (photoPreview) {
+                URL.revokeObjectURL(photoPreview);
+            }
+        };
+    }, [photoPreview]);
+
+    function handlePhotoChange(event) {
+        const file = event.target.files[0];
+
+        if (!file) {
+            setPhotoFile(null);
+            setPhotoPreview("");
+            return;
+        }
+
+        setError("");
+        setPhotoFile(file);
+        setPhotoPreview(URL.createObjectURL(file));
+    }
 
     //handles signup
     async function handleSignup(event) {
         event.preventDefault();
         setError("");
+
+        if (!photoFile) {
+            setError("Please upload a profile picture.");
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             const user = await signup(email, password);
@@ -54,6 +85,28 @@ function Signup({ setPage }) {
             }
         >
             <form className="auth-form" onSubmit={handleSignup}>
+                <div className="auth-field auth-field--photo">
+                    <label htmlFor="signup-photo">Profile picture</label>
+                    <div className="photo-upload">
+                        <label className="photo-upload__preview" htmlFor="signup-photo">
+                            {photoPreview ? (
+                                <img className="photo-upload__image" src={photoPreview} alt="" />
+                            ) : (
+                                <span className="photo-upload__placeholder" aria-hidden="true">+</span>
+                            )}
+                        </label>
+                        <input
+                            className="photo-upload__input"
+                            id="signup-photo"
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePhotoChange}
+                        />
+                        <span className="photo-upload__hint">
+                            {photoFile ? photoFile.name : "This appears on your bids"}
+                        </span>
+                    </div>
+                </div>
                 <div className="auth-field">
                     <label htmlFor="signup-name">Name</label>
                     <input
