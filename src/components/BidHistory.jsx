@@ -1,10 +1,11 @@
 /* Component that displays the bid history for the current auction */
+import { useEffect, useState } from "react";
 import "./BidHistory.css";
 
 //Formats a timestamp into a human-readable string
-function formatBidTime(timestamp) {
+function formatBidTime(timestamp, nowTimestamp) {
     const date = new Date(timestamp);
-    const now = new Date();
+    const now = new Date(nowTimestamp);
     const seconds = Math.floor((now - date) / 1000);
 
     if (seconds < 60) {
@@ -49,6 +50,15 @@ function formatBidTime(timestamp) {
 }
 
 function BidHistory({ bids }) {
+    const [now, setNow] = useState(Date.now());
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setNow(Date.now());
+        }, 10000);
+
+        return () => clearInterval(intervalId);
+    }, []);
 
     return (
         <section className="bid-history">
@@ -65,7 +75,7 @@ function BidHistory({ bids }) {
                             <span className="bid-history__bidder">{bid.bidder.name}</span>
                             <span className="bid-history__amount">R{bid.amount}</span>
                             <span className="bid-history__time">
-                                {formatBidTime(bid.timestamp)}
+                                {formatBidTime(bid.timestamp, now)}
                             </span>
                         </li>
                     ))
