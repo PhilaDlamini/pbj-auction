@@ -8,9 +8,15 @@ import {
     push,
     remove} from "firebase/database";
 
+import { getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL } from "firebase/storage";
+
 import { app } from "./config";
 
 const database = getDatabase(app);
+const storage = getStorage(app);
 
 
 // ====================
@@ -184,4 +190,27 @@ export async function deleteAllBids() {
         ref(database, "bids")
     );
 
+}
+
+
+// ====================
+// Storage
+// ====================
+
+//Uploads a user profile pic and returns the url
+export async function uploadPhotoById(uid, photoFile) {
+    const photoRef = storageRef(storage, `photos/${uid}`);
+
+    await uploadBytes(photoRef, photoFile, {
+        contentType: photoFile.type
+    });
+
+    return getDownloadURL(photoRef);
+}
+
+//Gets the user profile url
+export async function downloadPhotoById(uid) {
+    const photoRef = storageRef(storage, `photos/${uid}`);
+
+    return getDownloadURL(photoRef);
 }

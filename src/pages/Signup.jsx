@@ -3,9 +3,9 @@ The signup page
 */
 import { useEffect, useState } from "react";
 import { signup } from "../firebase/auth.js";
-import { createAccount } from "../firebase/database.js";
 import AuthLayout from "../components/AuthLayout.jsx";
 import "../components/AuthForm.css";
+import { createAccount, uploadPhotoById } from "../firebase/database.js";
 
 function Signup({ setPage }) {
 
@@ -54,6 +54,7 @@ function Signup({ setPage }) {
         setIsSubmitting(true);
         try {
             const user = await signup(email, password);
+            const photoURL = await uploadPhotoById(user.uid, photoFile);
 
             //save data to database
             await createAccount(
@@ -61,7 +62,7 @@ function Signup({ setPage }) {
                 {
                     name: name,
                     email: email,
-                    photoURL: "https://i.pravatar.cc/150?img=12" //dummy url for now
+                    photoURL: photoURL
                 }
             );
         } catch (error) {
