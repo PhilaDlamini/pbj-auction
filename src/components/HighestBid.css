@@ -1,0 +1,42 @@
+.hero {
+    text-align: center;
+    padding: 8px 24px 4px;
+}
+
+.hero__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-taupe);
+    margin-bottom: 12px;
+}
+
+.hero__amount {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(56px, 14vw, 88px);
+    line-height: 1;
+    color: var(--color-green-deep);
+    font-variant-numeric: tabular-nums;
+}
+
+.hero__label {
+    font-size: 15px;
+    color: var(--color-ink-soft);
+    margin-top: 10px;
+}
+
+.hero__bidder {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-top: 2px;
+}
+
+@media (max-width: 420px) {
+    .hero {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
