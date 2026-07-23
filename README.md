@@ -11,6 +11,7 @@ This is a monthly online auction where supporters can bid on a peanut butter and
 ### Frontend
 - React
 - JavaScript
+- Vite
 
 ### Backend
 - Firebase Authentication

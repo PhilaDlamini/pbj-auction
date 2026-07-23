@@ -37,3 +37,5 @@ export async function login(email, password) {
 export async function logout() {
     await signOut(auth);
 }
+
+export { auth };
