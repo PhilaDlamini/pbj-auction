@@ -162,9 +162,13 @@ export async function getAuctionData() {
         }
     );
 
+    // Sort bids by timestamp in descending order
+    const bidsByTimestamp = [...bids].sort(
+        (a, b) => b.timestamp - a.timestamp
+    );
 
     return {
-        bids,
+        bids: bidsByTimestamp,
         highestBid
     };
 }
