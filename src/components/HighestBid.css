@@ -27,11 +27,26 @@
     margin-top: 10px;
 }
 
+.hero__bidder-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.hero__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-green);
+}
+
 .hero__bidder {
     font-size: 15px;
     font-weight: 600;
     color: var(--color-ink);
-    margin-top: 2px;
 }
 
 @media (max-width: 420px) {

@@ -19,7 +19,7 @@
 
 .bid-history__row {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 12px;
     padding: 9px 0;
     border-bottom: 1px dashed var(--color-line);
@@ -31,16 +31,31 @@
     border-bottom: none;
 }
 
+.bid-history__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--color-taupe-soft);
+    border: 1px solid var(--color-line);
+}
+
 .bid-history__amount {
     color: var(--color-green-deep);
     font-weight: 600;
     min-width: 3.5em;
+    text-align: right;
 }
 
 .bid-history__bidder {
     flex: 1;
+    min-width: 0;
     color: var(--color-ink);
     font-family: var(--font-body);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .bid-history__time {
@@ -60,6 +75,7 @@
 
     .bid-history__time {
         flex-basis: 100%;
+        margin-left: 40px;
         font-size: 12px;
     }
 }
