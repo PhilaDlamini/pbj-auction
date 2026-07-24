@@ -8,7 +8,7 @@ import BidHistory from "../components/BidHistory";
 import AcaciaDivider from "../components/AcaciaDivider";
 import Header from "../components/Header";
 import { logout } from "../firebase/auth.js";
-import { getAuctionData } from "../firebase/database.js";
+import { subscribeToAuctionData } from "../firebase/database.js";
 import "./Home.css";
 
 function Home () {
@@ -23,15 +23,20 @@ function Home () {
         }
     }
 
-    async function loadAuction() {
-        const auction = await getAuctionData();
-
-        setHighestBid(auction.highestBid);
-        setBids(auction.bids);
-    }
-
+    // Home binds to the Firebase 'bids' path and listens for changes.
+    // When bids change, it updates state shared with HighestBid, BidForm, and BidHistory.
     useEffect(() => {
-        loadAuction();
+        const unsubscribe = subscribeToAuctionData(
+            (auction) => {
+                setHighestBid(auction.highestBid);
+                setBids(auction.bids);
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
+
+        return unsubscribe;
     }, []);
 
     return (
@@ -40,7 +45,7 @@ function Home () {
             <main className="auction-card">
                 <HighestBid highestBid={highestBid} />
                 <AcaciaDivider />
-                <BidForm highestBid={highestBid} loadAuction={loadAuction} />
+                <BidForm highestBid={highestBid} />
                 <BidHistory bids={bids} />
             </main>
         </div>

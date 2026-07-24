@@ -6,7 +6,8 @@ import {
     set,
     get,
     push,
-    remove} from "firebase/database";
+    remove,
+    onValue} from "firebase/database";
 
 import { getStorage,
     ref as storageRef,
@@ -45,7 +46,6 @@ export async function getAccountById(uid) {
 }
 
 
-//TODO: TEST ALL BELOW
 // ====================
 // Bids
 // ====================
@@ -64,119 +64,106 @@ export async function createBid(uid, amount) {
 }
 
 
-// Returns every bid
-export async function getBids() {
-
-    const snapshot = await get(
-        ref(database, "bids")
-    );
-
-    return snapshot.val();
-
-}
-
-/* 
-Returns the list of bids enriched with the bidder's account info
-
-Example:
-[{
-        bidId: "-abc123",
-        amount: 50,
-        timestamp: 1753212500,
-        bidder: {
-            name: "Phila",
-            photoURL: "https://..."
-        }
-}]
-*/
-export async function getBidsWithAccounts() {
-
-    const bids = await getBids();
-
-    if (!bids) {
-        return [];
-    }
-
-    const enrichedBids = await Promise.all(
-        Object.entries(bids).map(
-            async ([bidId, bid]) => {
-
-                const account = await getAccountById(
-                    bid.bidderId
-                );
-
-                return {
-                    bidId,
-                    ...bid,
-                    bidder: account
-                };
-            }
-        )
-    );
-
-    return enrichedBids;
-}
-
 /*
-Returns all auction data needed by Home.
+Subscribes to live bid changes and sends Home the full auction state.
 
-Example:
+onAuctionData is a callback that receives an object with the following properties:
+- bids: all bids ordered by date (newest first),
+- highestBid: the bid with the highest amount, or null if there are no bids
+Note that boths 'bids' and 'highestBid' are enriched with the bidder's account information:
+Eg:
+    {   bidderId: "uid1"
+        amount: 25
+        timestamp: 1753212345,
+        bidder: { name: "Alice", email: "...", photoURL: "..." } }
 
-{
-    bids: [
-        {
-            bidId: "-abc123",
-            amount: 50,
-            timestamp: 1753212500,
-            bidder: {
-                name: "Phila",
-                photoURL: "..."
-            }
-        }
-    ],
+onError is an optional callback that accepts an error, and runs if Firebase cannot read the bids path
 
-    highestBid: {
-        bidId: "-abc123",
-        amount: 50,
-        timestamp: 1753212500,
-        bidder: {
-            name: "Phila",
-            photoURL: "..."
-        }
-    }
-}
+subscribeToAuctionData return onValue, which is a function that unsubscribes from the live bid changes when called.
+This is useful for cleaning up the subscription when Home unmounts.
 */
-export async function getAuctionData() {
 
-    const bids = await getBidsWithAccounts();
+export function subscribeToAuctionData(onAuctionData, onError) {
+    // Maps each account id (bidder id) to the account information
+    const accountsById = new Map();
+    const bidsRef = ref(database, "bids");
 
-    if (bids.length === 0) {
-        return {
-            bids: [],
-            highestBid: null
-        };
-    }
+    // Listen once immediately, then again whenever bids change.
+    return onValue(
+        bidsRef,
+        async (snapshot) => {
+            // Read the current bids object from Firebase.
+            const bids = snapshot.val();
 
+            // Send empty auction state if no bids exist yet.
+            if (!bids) {
+                onAuctionData({
+                    bids: [],
+                    highestBid: null
+                });
+                return;
+            }
 
-    const highestBid = bids.reduce(
-        (highest, current) => {
+            // Convert Firebase's bid object into an array.
+            const bidList = Object.entries(bids).map(([bidId, bid]) => ({
+                bidId,
+                ...bid
+            }));
 
-            return current.amount > highest.amount
-                ? current
-                : highest;
+            // Create a list of unique bidder ids from the bid list.
+            const uniqueBidderIds = [
+                ...new Set(
+                    bidList.map((bid) => bid.bidderId)
+                )
+            ];
 
+            // Fetch any bidder accounts not already in the cache.
+            await Promise.all(
+                uniqueBidderIds.map(async (bidderId) => {
+                    if (!accountsById.has(bidderId)) {
+                        const account = await getAccountById(bidderId);
+                        accountsById.set(bidderId, account);
+                    }
+                })
+            );
+
+            // Attach each bidder account to its bid.
+            const enrichedBids = bidList.map((bid) => ({
+                ...bid,
+                bidder: accountsById.get(bid.bidderId)
+            }));
+
+            // Find the bid with the highest amount.
+            const highestBid = enrichedBids.reduce(
+                (highest, current) => (
+                    current.amount > highest.amount
+                        ? current
+                        : highest
+                )
+            );
+
+            // Sort bid history newest-first.
+            const bidsByTimestamp = [...enrichedBids].sort(
+                (a, b) => b.timestamp - a.timestamp
+            );
+
+            // Send the final auction state back to Home.
+            onAuctionData({
+                bids: bidsByTimestamp,
+                highestBid
+            });
+        },
+        (error) => {
+            // Let Home handle the error if it provided an error handler.
+            if (onError) {
+                onError(error);
+                return;
+            }
+
+            // Otherwise, log the Firebase read error.
+            console.error(error);
         }
     );
-
-    // Sort bids by timestamp in descending order
-    const bidsByTimestamp = [...bids].sort(
-        (a, b) => b.timestamp - a.timestamp
-    );
-
-    return {
-        bids: bidsByTimestamp,
-        highestBid
-    };
 }
 
 // ====================
