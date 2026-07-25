@@ -16,8 +16,9 @@ import { APP_PAGES, AUTH_PAGES } from './constants/pages.js';
 function App() {
 
   const { currentUser, account } = useAuth();
-  const [page, setPage] = useState(APP_PAGES.HOME);
+  const [page, setPage] = useState(APP_PAGES.HOME); //The current page the user is on. Defaults to home.
 
+  //if the user is now logged in and they are on the login or signup page, redirect them to the home page
   useEffect(() => {
     if (
       currentUser &&
@@ -36,18 +37,22 @@ function App() {
     }
   }
 
+  // If the user is on the login page, render the login component
   if (page === AUTH_PAGES.LOGIN) {
     return <Login setPage={setPage} />;
   }
 
+  // If the user is on the signup page, render the signup component
   if (page === AUTH_PAGES.SIGNUP) {
     return <SignUp setPage={setPage} />;
   }
 
+  // If the user is on the account page and they are not logged in, redirect them to the login page
   if (page === APP_PAGES.ACCOUNT && !currentUser) {
     return <Login setPage={setPage} />;
   }
 
+  // Render the appropriate page based on the current page state
   function renderPage() {
     switch(page) {
       case APP_PAGES.HOME:

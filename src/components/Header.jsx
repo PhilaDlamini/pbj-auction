@@ -9,11 +9,13 @@ function Header({ currentUser, account, onLogin, onLogout, activePage, onNavigat
     const profileRef = useRef(null);
     const isLoggedIn = Boolean(currentUser);
 
+    //whenever isMenuOpen changes...
     useEffect(() => {
-        if (!isMenuOpen) {
+        if (!isMenuOpen) { //make sure menu is open
             return;
         }
 
+        //check if the profile area exists and the click was outside of it. if so, close the menu
         function handleClickOutside(event) {
             if (
                 profileRef.current &&
@@ -23,8 +25,10 @@ function Header({ currentUser, account, onLogin, onLogout, activePage, onNavigat
             }
         }
 
+        //listen for any pointer press on the document, and call handleClickOutside
         document.addEventListener("pointerdown", handleClickOutside);
 
+        //remove the event listener when the component unmounts or the menu closes
         return () => document.removeEventListener("pointerdown", handleClickOutside);
     }, [isMenuOpen]);
 
@@ -52,8 +56,13 @@ function Header({ currentUser, account, onLogin, onLogout, activePage, onNavigat
                                 onClick={() => setIsMenuOpen((current) => !current)}
                                 type="button"
                             >
-                                <span>{account?.name ?? currentUser.email}</span>
-                                <span className="site-header__chevron" aria-hidden="true">⌄</span>
+                                <span>{account?.name ?? ""}</span>
+                                <img
+                                    className="site-header__chevron"
+                                    src={`${import.meta.env.BASE_URL}chevron-down.svg`}
+                                    alt=""
+                                    aria-hidden="true"
+                                />
                             </button>
                             {isMenuOpen && (
                                 <div className="site-header__menu">
