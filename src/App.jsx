@@ -56,13 +56,13 @@ function App() {
   function renderPage() {
     switch(page) {
       case APP_PAGES.HOME:
-        return <Home onNavigate={setPage} />;
+        return <Home setPage={setPage} />;
       case APP_PAGES.ACCOUNT:
         return <Account />;
       case APP_PAGES.PAST_WINNERS:
         return <PastWinners />;
       default:
-        return <Home onNavigate={setPage} />;
+        return <Home setPage={setPage} />;
     }
   }
 
@@ -74,7 +74,7 @@ function App() {
         onLogin={() => setPage(AUTH_PAGES.LOGIN)}
         onLogout={handleLogout}
         activePage={page}
-        onNavigate={setPage}
+        setPage={setPage}
       />
       {renderPage()}
     </div>

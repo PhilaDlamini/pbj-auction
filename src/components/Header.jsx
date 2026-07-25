@@ -4,7 +4,7 @@ import logo from "../assets/imagine-scholar-logo.png";
 import { APP_PAGES } from "../constants/pages.js";
 import "./Header.css";
 
-function Header({ currentUser, account, onLogin, onLogout, activePage, onNavigate }) {
+function Header({ currentUser, account, onLogin, onLogout, activePage, setPage }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const profileRef = useRef(null);
     const isLoggedIn = Boolean(currentUser);
@@ -82,20 +82,20 @@ function Header({ currentUser, account, onLogin, onLogout, activePage, onNavigat
             <nav className="site-header__nav">
                 <button
                     className={`site-header__nav-link ${activePage === APP_PAGES.HOME ? "is-active" : ""}`}
-                    onClick={() => onNavigate(APP_PAGES.HOME)}
+                    onClick={() => setPage(APP_PAGES.HOME)}
                 >
                     Home
                 </button>
                 <button
                     className={`site-header__nav-link ${activePage === APP_PAGES.PAST_WINNERS ? "is-active" : ""}`}
-                    onClick={() => onNavigate(APP_PAGES.PAST_WINNERS)}
+                    onClick={() => setPage(APP_PAGES.PAST_WINNERS)}
                 >
                     Past Winners
                 </button>
                 {isLoggedIn && (
                     <button
                         className={`site-header__nav-link ${activePage === APP_PAGES.ACCOUNT ? "is-active" : ""}`}
-                        onClick={() => onNavigate(APP_PAGES.ACCOUNT)}
+                        onClick={() => setPage(APP_PAGES.ACCOUNT)}
                     >
                         Account
                     </button>

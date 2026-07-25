@@ -10,7 +10,7 @@ import { subscribeToAuctionData } from "../firebase/database.js";
 import { AUTH_PAGES } from "../constants/pages.js";
 import "./Home.css";
 
-function Home ({ onNavigate }) {
+function Home ({ setPage }) {
     const [highestBid, setHighestBid] = useState(null);
     const [bids, setBids] = useState([]);
 
@@ -34,7 +34,7 @@ function Home ({ onNavigate }) {
         <main className="auction-card">
             <HighestBid highestBid={highestBid} />
             <AcaciaDivider />
-            <BidForm highestBid={highestBid} onLoginRequired={() => onNavigate(AUTH_PAGES.LOGIN)} />
+            <BidForm highestBid={highestBid} onLoginRequired={() => setPage(AUTH_PAGES.LOGIN)} />
             <BidHistory bids={bids} />
         </main>
     );
