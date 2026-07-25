@@ -25,21 +25,6 @@ This is a monthly online auction where supporters can bid on a peanut butter and
 
 # Features
 
-## Current Auction
-
-Users can:
-
-- View the current highest bid
-- See the current highest bidder
-- Submit a higher bid
-- View bid history
-
-Rules:
-- A new bid must be higher than the current highest bid
-- Users can place multiple bids during the month
-
----
-
 ## Monthly Auction Lifecycle
 
 At the end of each month:
@@ -78,15 +63,31 @@ root
 │         email: "wethu@email.com"
 │         photoURL: "image-url"
 │
-└── bids
+├── bids
+│   │
+│   ├── bid1
+│   │     bidderId: "uid1"
+│   │     amount: 25
+│   │     timestamp: 1753212345
+│   │
+│   └── bid2
+│          bidderId: "uid2"
+│          amount: 50
+│          timestamp: 1753212500
+│
+└── previous winners
     │
-    ├── bid1
+    ├── monthId1
+    │     month: June 2026
     │     bidderId: "uid1"
+    │     photoURL: "pbj-image-url"
     │     amount: 25
     │     timestamp: 1753212345
     │
-    └── bid2
+    └── monthId2
+          month: July 2026
           bidderId: "uid2"
+          photoURL: "pbj-image-url"
           amount: 50
           timestamp: 1753212500
 ```
