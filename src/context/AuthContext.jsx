@@ -12,6 +12,7 @@ import {
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/auth";
+import { getAccountById } from "../firebase/database.js";
 
 //Stores data about the current user 
 const AuthContext = createContext();
@@ -19,8 +20,16 @@ const AuthContext = createContext();
 //Wraps all components that need access to data in the context
 export function AuthProvider({ children }) {
 
-    //the data stored in the context is the current user
-    const [currentUser, setCurrentUser] = useState(null);
+    //Store current user information in state
+    const [currentUser, setCurrentUser] = useState(null); //The Firebase Auth user object
+    const [account, setAccount] = useState(null); //The account information in realtime database (name, email, photoURL)
+
+    //Loads the account information from the database and sets it in state
+    async function loadAccount(uid) {
+        const accountData = await getAccountById(uid);
+        setAccount(accountData);
+        return accountData;
+    }
 
     //Runs the code when the AuthProvider component is mounted
     useEffect(() => {
@@ -29,6 +38,12 @@ export function AuthProvider({ children }) {
             auth,
             (user) => {
                 setCurrentUser(user);
+                setAccount(null); // Clear account state when user changes
+
+                //if the user is logged in, load their account information
+                if (user) {
+                    loadAccount(user.uid);
+                }
             }
         );
 
@@ -38,7 +53,7 @@ export function AuthProvider({ children }) {
 
 
     return (
-        <AuthContext.Provider value={{ currentUser }}>
+        <AuthContext.Provider value={{ currentUser, account, setAccount, loadAccount }}>
             {children}
         </AuthContext.Provider>
     );

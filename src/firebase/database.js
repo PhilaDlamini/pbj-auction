@@ -45,6 +45,14 @@ export async function getAccountById(uid) {
     return snapshot.val();
 }
 
+export async function updateAccountPhotoById(uid, photoURL) {
+
+    await set(
+        ref(database, `accounts/${uid}/photoURL`),
+        photoURL
+    );
+
+}
 
 // ====================
 // Bids

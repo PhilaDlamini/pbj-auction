@@ -7,8 +7,7 @@ import Header from "../components/Header.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { logout } from "../firebase/auth.js";
 import {
-    getAccountById,
-    createAccount,
+    updateAccountPhotoById,
     uploadPhotoById,
     subscribeToAuctionData
 } from "../firebase/database.js";
@@ -17,8 +16,7 @@ import "../components/AuthForm.css";
 import "./Account.css";
 
 function Account({ onNavigate }) {
-    const { currentUser } = useAuth();
-    const [account, setAccount] = useState(null);
+    const { currentUser, account, setAccount } = useAuth();
     const [myBids, setMyBids] = useState([]);
     const [now, setNow] = useState(Date.now());
     const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
@@ -31,21 +29,6 @@ function Account({ onNavigate }) {
             console.error(error);
         }
     }
-
-    // Load this user's own account details (name, email, photoURL)
-    useEffect(() => {
-        let isMounted = true;
-
-        getAccountById(currentUser.uid).then((data) => {
-            if (isMounted) {
-                setAccount(data);
-            }
-        });
-
-        return () => {
-            isMounted = false;
-        };
-    }, [currentUser.uid]);
 
     // Reuse the same live auction feed Home uses, filtered down to this user's bids
     useEffect(() => {
@@ -82,12 +65,7 @@ function Account({ onNavigate }) {
         setIsUploadingPhoto(true);
         try {
             const photoURL = await uploadPhotoById(currentUser.uid, file);
-
-            await createAccount(currentUser.uid, {
-                ...account,
-                photoURL
-            });
-
+            await updateAccountPhotoById(currentUser.uid, photoURL);
             setAccount((current) => ({ ...current, photoURL }));
         } catch (error) {
             console.error(error);

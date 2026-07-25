@@ -3,11 +3,13 @@ The signup page
 */
 import { useEffect, useState } from "react";
 import { signup } from "../firebase/auth.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import AuthLayout from "../components/AuthLayout.jsx";
 import "../components/AuthForm.css";
 import { createAccount, uploadPhotoById } from "../firebase/database.js";
 
 function Signup({ setPage }) {
+    const { loadAccount } = useAuth();
 
     //all vars
     const [name, setName] = useState("");
@@ -65,6 +67,9 @@ function Signup({ setPage }) {
                     photoURL: photoURL
                 }
             );
+
+            //save the account data to context so that it is available immediately
+            await loadAccount(user.uid);
         } catch (error) {
             console.error(error);
             setError("Couldn't create your account. That email may already be in use.");
