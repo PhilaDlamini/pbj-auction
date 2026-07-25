@@ -4,31 +4,76 @@ Determines which page the users sees
 */
 import Home from './pages/Home.jsx';
 import Account from './pages/Account.jsx';
+import PastWinners from './pages/PastWinners.jsx';
 import Login from './pages/Login.jsx';
 import SignUp from './pages/Signup.jsx';
+import Header from './components/Header.jsx';
 import { useAuth } from './context/AuthContext.jsx';
-import { useState } from "react";
+import { logout } from './firebase/auth.js';
+import { useEffect, useState } from "react";
+import { APP_PAGES, AUTH_PAGES } from './constants/pages.js';
 
 function App() {
 
-  const { currentUser } = useAuth();
-  const [authPage, setAuthPage] = useState("login");
-  const [appPage, setAppPage] = useState("home");
+  const { currentUser, account } = useAuth();
+  const [page, setPage] = useState(APP_PAGES.HOME);
 
-  if (!currentUser) {
-
-    if (authPage === "signup") {
-      return ( <SignUp setPage={setAuthPage} />);
+  useEffect(() => {
+    if (
+      currentUser &&
+      (page === AUTH_PAGES.LOGIN || page === AUTH_PAGES.SIGNUP)
+    ) {
+      setPage(APP_PAGES.HOME);
     }
+  }, [currentUser, page]);
 
-    return (<Login setPage={setAuthPage} />);
+  async function handleLogout() {
+    try {
+      await logout();
+      setPage(APP_PAGES.HOME);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  if (appPage === "account") {
-    return <Account onNavigate={setAppPage} />;
+  if (page === AUTH_PAGES.LOGIN) {
+    return <Login setPage={setPage} />;
   }
 
-  return <Home onNavigate={setAppPage} />
+  if (page === AUTH_PAGES.SIGNUP) {
+    return <SignUp setPage={setPage} />;
+  }
+
+  if (page === APP_PAGES.ACCOUNT && !currentUser) {
+    return <Login setPage={setPage} />;
+  }
+
+  function renderPage() {
+    switch(page) {
+      case APP_PAGES.HOME:
+        return <Home onNavigate={setPage} />;
+      case APP_PAGES.ACCOUNT:
+        return <Account />;
+      case APP_PAGES.PAST_WINNERS:
+        return <PastWinners />;
+      default:
+        return <Home onNavigate={setPage} />;
+    }
+  }
+
+  return (
+    <div className="page">
+      <Header
+        currentUser={currentUser}
+        account={account}
+        onLogin={() => setPage(AUTH_PAGES.LOGIN)}
+        onLogout={handleLogout}
+        activePage={page}
+        onNavigate={setPage}
+      />
+      {renderPage()}
+    </div>
+  );
 }
 
 export default App;

@@ -4,7 +4,7 @@ import { createBid } from "../firebase/database.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import "./BidForm.css";
 
-function BidForm({ highestBid }) {
+function BidForm({ highestBid, onLoginRequired }) {
     const [amount, setAmount] = useState("");
     const { currentUser } = useAuth();
     const currentHighest = highestBid
@@ -13,6 +13,11 @@ function BidForm({ highestBid }) {
 
     async function handleSubmit(event) {
         event.preventDefault();
+
+        if (!currentUser) {
+            onLoginRequired();
+            return;
+        }
 
         const bidAmount = Number(amount);
 

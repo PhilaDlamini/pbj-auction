@@ -1,0 +1,21 @@
+.past-winners {
+    padding: 8px 24px 32px;
+}
+
+.past-winners__title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.past-winners__empty {
+    font-size: 14px;
+    color: var(--color-ink-soft);
+}
+
+@media (max-width: 420px) {
+    .past-winners {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}

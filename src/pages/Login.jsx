@@ -2,6 +2,7 @@
 import { login } from "../firebase/auth.js";
 import { useState } from "react";
 import AuthLayout from "../components/AuthLayout.jsx";
+import { AUTH_PAGES } from "../constants/pages.js";
 import "../components/AuthForm.css";
 
 function Login({ setPage }) {
@@ -33,7 +34,7 @@ function Login({ setPage }) {
             footer={
                 <>
                     Don&rsquo;t have an account?
-                    <button className="auth-link-button" type="button" onClick={() => setPage("signup")}>
+                    <button className="auth-link-button" type="button" onClick={() => setPage(AUTH_PAGES.SIGNUP)}>
                         Create one
                     </button>
                 </>

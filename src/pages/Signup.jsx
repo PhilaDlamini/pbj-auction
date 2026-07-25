@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { signup } from "../firebase/auth.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import AuthLayout from "../components/AuthLayout.jsx";
+import { AUTH_PAGES } from "../constants/pages.js";
 import "../components/AuthForm.css";
 import { createAccount, uploadPhotoById } from "../firebase/database.js";
 
@@ -84,7 +85,7 @@ function Signup({ setPage }) {
             footer={
                 <>
                     Already have an account?
-                    <button className="auth-link-button" type="button" onClick={() => setPage("login")}>
+                    <button className="auth-link-button" type="button" onClick={() => setPage(AUTH_PAGES.LOGIN)}>
                         Log in
                     </button>
                 </>

@@ -18,7 +18,7 @@
     display: block;
 }
 
-.site-header__logout {
+.site-header__login {
     flex-shrink: 0;
     background: none;
     border: 1px solid var(--color-line);
@@ -32,9 +32,87 @@
     transition: border-color 0.15s ease, color 0.15s ease;
 }
 
-.site-header__logout:hover {
+.site-header__login:hover {
     color: var(--color-green-deep);
     border-color: var(--color-green);
+}
+
+.site-header__profile {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.site-header__profile-menu {
+    position: relative;
+}
+
+.site-header__profile-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 220px;
+    background: none;
+    border: none;
+    padding: 6px 0;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink);
+    cursor: pointer;
+}
+
+.site-header__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.site-header__profile-button span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-header__chevron {
+    color: var(--color-ink-soft);
+    font-size: 16px;
+    line-height: 1;
+}
+
+.site-header__menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 2;
+    min-width: 120px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+    padding: 6px;
+}
+
+.site-header__menu-item {
+    width: 100%;
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    text-align: left;
+    cursor: pointer;
+}
+
+.site-header__menu-item:hover {
+    color: var(--color-green-deep);
+    background: var(--color-taupe-soft);
 }
 
 .site-header__nav {
@@ -72,8 +150,14 @@
         height: 34px;
     }
 
-    .site-header__logout {
+    .site-header__login,
+    .site-header__menu-item {
         padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .site-header__profile-button {
+        max-width: 170px;
         font-size: 13px;
     }
 
