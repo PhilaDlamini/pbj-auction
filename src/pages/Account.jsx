@@ -12,6 +12,7 @@ import {
     uploadPhotoById,
     subscribeToAuctionData
 } from "../firebase/database.js";
+import { formatBidTime } from "../utils/formatBidTime.js";
 import "../components/AuthForm.css";
 import "./Account.css";
 
@@ -19,6 +20,7 @@ function Account({ onNavigate }) {
     const { currentUser } = useAuth();
     const [account, setAccount] = useState(null);
     const [myBids, setMyBids] = useState([]);
+    const [now, setNow] = useState(Date.now());
     const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
     const [photoError, setPhotoError] = useState("");
 
@@ -60,6 +62,14 @@ function Account({ onNavigate }) {
 
         return unsubscribe;
     }, [currentUser.uid]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setNow(Date.now());
+        }, 10000);
+
+        return () => clearInterval(intervalId);
+    }, []);
 
     async function handlePhotoChange(event) {
         const file = event.target.files[0];
@@ -134,7 +144,7 @@ function Account({ onNavigate }) {
                                 <li className="account-bids__row" key={bid.bidId}>
                                     <span className="account-bids__amount">R{bid.amount}</span>
                                     <span className="account-bids__time">
-                                        {new Date(bid.timestamp).toLocaleString()}
+                                        {formatBidTime(bid.timestamp, now)}
                                     </span>
                                 </li>
                             ))}
