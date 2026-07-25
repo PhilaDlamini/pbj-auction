@@ -1,0 +1,84 @@
+.account-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 8px 24px 4px;
+}
+
+.account-profile__photo.photo-upload .photo-upload__preview {
+    width: 112px;
+    height: 112px;
+}
+
+.account-profile__name {
+    margin-top: 16px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.account-profile__email {
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--color-ink-soft);
+}
+
+.account-bids {
+    padding: 4px 24px 28px;
+    border-top: 1px solid var(--color-line);
+    margin-top: 28px;
+    padding-top: 22px;
+}
+
+.account-bids__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.account-bids__empty {
+    font-size: 14px;
+    color: var(--color-ink-soft);
+}
+
+.account-bids__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.account-bids__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--color-line);
+    font-family: var(--font-mono);
+    font-size: 14px;
+}
+
+.account-bids__row:last-child {
+    border-bottom: none;
+}
+
+.account-bids__amount {
+    color: var(--color-green-deep);
+    font-weight: 600;
+}
+
+.account-bids__time {
+    color: var(--color-ink-soft);
+}
+
+@media (max-width: 420px) {
+    .account-profile {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .account-bids {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}

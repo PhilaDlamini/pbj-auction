@@ -11,7 +11,7 @@ import { logout } from "../firebase/auth.js";
 import { subscribeToAuctionData } from "../firebase/database.js";
 import "./Home.css";
 
-function Home () {
+function Home ({ onNavigate }) {
     const [highestBid, setHighestBid] = useState(null);
     const [bids, setBids] = useState([]);
 
@@ -41,7 +41,7 @@ function Home () {
 
     return (
         <div className="page">
-            <Header onLogout={handleLogout} />
+            <Header onLogout={handleLogout} activePage="home" onNavigate={onNavigate} />
             <main className="auction-card">
                 <HighestBid highestBid={highestBid} />
                 <AcaciaDivider />
