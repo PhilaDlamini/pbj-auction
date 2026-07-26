@@ -13,6 +13,12 @@
     color: var(--color-ink-soft);
 }
 
+.past-winners__error {
+    margin-bottom: 12px;
+    color: var(--color-error);
+    font-size: 14px;
+}
+
 .past-winners__list {
     list-style: none;
     margin: 18px 0 0;
@@ -36,6 +42,14 @@
     flex-shrink: 0;
 }
 
+.past-winners__photo-label {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
 .past-winners__photo,
 .past-winners__photo-placeholder {
     width: 100%;
@@ -57,6 +71,23 @@
     color: var(--color-ink-soft);
     font-family: var(--font-mono);
     font-size: 13px;
+    font-weight: 600;
+}
+
+.past-winners__photo-input {
+    display: none;
+}
+
+.past-winners__uploading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: rgb(255 255 255 / 78%);
+    color: var(--color-ink);
+    font-size: 12px;
     font-weight: 600;
 }
 

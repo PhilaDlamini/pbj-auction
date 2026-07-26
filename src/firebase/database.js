@@ -226,6 +226,16 @@ export function subscribeToPastWinners(onPastWinners, onError) {
     );
 }
 
+//Updates the photoURL of a past winner by monthId
+export async function updatePastWinnerPhotoById(monthId, photoURL) {
+
+    await set(
+        ref(database, `previousWinners/${monthId}/photoURL`),
+        photoURL
+    );
+
+}
+
 // ====================
 // Monthly Reset
 // ====================
@@ -247,6 +257,17 @@ export async function deleteAllBids() {
 //Uploads a user profile pic and returns the url
 export async function uploadPhotoById(uid, photoFile) {
     const photoRef = storageRef(storage, `photos/${uid}`);
+
+    await uploadBytes(photoRef, photoFile, {
+        contentType: photoFile.type
+    });
+
+    return getDownloadURL(photoRef);
+}
+
+//Uploads a past winner photo and returns the url
+export async function uploadPastWinnerPhotoById(monthId, photoFile) {
+    const photoRef = storageRef(storage, `pastWinners/${monthId}`);
 
     await uploadBytes(photoRef, photoFile, {
         contentType: photoFile.type
