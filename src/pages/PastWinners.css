@@ -13,9 +13,108 @@
     color: var(--color-ink-soft);
 }
 
+.past-winners__list {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+}
+
+.past-winners__row {
+    display: flex;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px dashed var(--color-line);
+}
+
+.past-winners__row:last-child {
+    border-bottom: none;
+}
+
+.past-winners__photo-wrap {
+    width: 96px;
+    height: 72px;
+    flex-shrink: 0;
+}
+
+.past-winners__photo,
+.past-winners__photo-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-line);
+}
+
+.past-winners__photo {
+    display: block;
+    object-fit: cover;
+}
+
+.past-winners__photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-taupe-soft);
+    color: var(--color-ink-soft);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.past-winners__details {
+    flex: 1;
+    min-width: 0;
+}
+
+.past-winners__topline {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.past-winners__month {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.past-winners__amount {
+    flex-shrink: 0;
+    color: var(--color-green-deep);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.past-winners__winner {
+    margin-top: 6px;
+    color: var(--color-ink);
+    font-size: 14px;
+}
+
+.past-winners__date {
+    margin-top: 4px;
+    color: var(--color-ink-soft);
+    font-size: 13px;
+}
+
 @media (max-width: 420px) {
     .past-winners {
         padding-left: 16px;
         padding-right: 16px;
+    }
+
+    .past-winners__row {
+        gap: 12px;
+    }
+
+    .past-winners__photo-wrap {
+        width: 78px;
+        height: 64px;
+    }
+
+    .past-winners__topline {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
     }
 }

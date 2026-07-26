@@ -174,6 +174,58 @@ export function subscribeToAuctionData(onAuctionData, onError) {
     );
 }
 
+/*
+Subscribes to previous winners and attaches each winner's account information.
+
+onPastWinners receives an array of winner records ordered by newest first.
+Each winner includes a bidder field with the account information for bidderId.
+*/
+export function subscribeToPastWinners(onPastWinners, onError) {
+    const previousWinnersRef = ref(database, "previousWinners");
+
+    return onValue(
+        previousWinnersRef,
+        async (snapshot) => {
+            const previousWinners = snapshot.val();
+
+            if (!previousWinners) {
+                onPastWinners([]);
+                return;
+            }
+
+            const winnerList = Object.entries(previousWinners).map(([monthId, winner]) => ({
+                monthId,
+                ...winner
+            }));
+
+            const enrichedWinners = await Promise.all(
+                winnerList.map(async (winner) => {
+                    const account = await getAccountById(winner.bidderId);
+
+                    return {
+                        ...winner,
+                        bidder: account
+                    };
+                })
+            );
+
+            const winnersByTimestamp = [...enrichedWinners].sort(
+                (a, b) => b.timestamp - a.timestamp
+            );
+
+            onPastWinners(winnersByTimestamp);
+        },
+        (error) => {
+            if (onError) {
+                onError(error);
+                return;
+            }
+
+            console.error(error);
+        }
+    );
+}
+
 // ====================
 // Monthly Reset
 // ====================
