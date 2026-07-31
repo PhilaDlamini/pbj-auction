@@ -196,16 +196,16 @@ async function closeMonthlyAuction() {
     timestamp: highestBid.timestamp,
   });
 
+  // Clear the bids and save them to lastMonthBids for record-keeping
+  await db.ref("lastMonthBids").set(bids);
+  await db.ref("bids").remove();
+
   // Send emails to the winner and the coordinator
   await sendMonthlyCloseEmails({
     highestBid,
     winnerAccount,
     month,
   });
-
-  // Clear the bids and save them to lastMonthBids for record-keeping
-  await db.ref("lastMonthBids").set(bids);
-  await db.ref("bids").remove();
 
   logger.log(`Saved ${month} winner: ${highestBid.bidderId}`);
 
