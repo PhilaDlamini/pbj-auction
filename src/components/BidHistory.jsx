@@ -21,12 +21,14 @@ function BidHistory({ bids }) {
                 {
                     bids.map((bid) => (
                         <li className="bid-history__row" key={bid.bidId}>
-                            <img
-                                className="bid-history__avatar"
-                                src={bid.bidder.photoURL}
-                                alt={bid.bidder.name}
-                            />
-                            <span className="bid-history__bidder">{bid.bidder.name}</span>
+                            {bid.bidder?.photoURL && (
+                                <img
+                                    className="bid-history__avatar"
+                                    src={bid.bidder.photoURL}
+                                    alt={bid.bidder?.name ?? ""}
+                                />
+                            )}
+                            <span className="bid-history__bidder">{bid.bidder?.name ?? "Unknown bidder"}</span>
                             <span className="bid-history__amount">R{bid.amount}</span>
                             <span className="bid-history__time">
                                 {formatBidTime(bid.timestamp, now)}

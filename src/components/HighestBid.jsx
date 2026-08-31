@@ -19,12 +19,14 @@ function HighestBid({ highestBid }) {
             <p className="hero__amount">R{highestBid.amount}</p>
             <p className="hero__label">current highest bid</p>
             <div className="hero__bidder-row">
-                <img
-                    className="hero__avatar"
-                    src={highestBid.bidder.photoURL}
-                    alt={highestBid.bidder.name}
-                />
-                <p className="hero__bidder">held by {highestBid.bidder.name}</p>
+                {highestBid.bidder?.photoURL && (
+                    <img
+                        className="hero__avatar"
+                        src={highestBid.bidder.photoURL}
+                        alt={highestBid.bidder?.name ?? ""}
+                    />
+                )}
+                <p className="hero__bidder">held by {highestBid.bidder?.name ?? "Unknown bidder"}</p>
             </div>
         </section>
     );
